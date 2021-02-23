@@ -1,0 +1,130 @@
+from functools import reduce
+import operator
+
+#What do I know about iterables and iterators:
+#Iterators implement the __next__ method, Iterables are anything that can be looped over, they must return an Iterator, Iterators are Iterables.
+
+class ExampleIterable:
+    def __init__(self,data):
+        self.data = data
+
+    def __iter__(self):
+        return ExampleIterator(self.data)
+
+
+class ExampleIterable2:
+    def __init__(self,data):
+        self.data = data
+
+    def __iter__(self):
+        return ExampleIterator2(self.data)
+
+class ExampleIterator2:
+    def __init__(self,data):
+        self.index = 0
+        self.data = data
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.index >= len(self.data):
+            raise StopIteration
+
+        result = self.data[self.index - 1]
+        self.index += 1
+        return result
+
+class ExampleIterator:
+    def __init__(self,data):
+        self.index = 0
+        self.data = data
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.index >= len(self.data):
+            raise StopIteration()
+
+        result = self.data[self.index]
+        self.index +=1
+        return result
+
+class Employee:
+    def __init__(self, name, salary, years_experience):
+        self.name = name
+        self.salary = salary
+        self.years_experience = years_experience
+
+    def __repr__(self, name, salary, years_experience):
+        return "Class AccountExecutive{name:{},salary:{},years_experience:{}".format(self.name, self.salary,
+                                                                                     self.years_experience)
+
+
+def give_employee_raise(x):
+    total_raise_percentage = .10
+    raise_amount = total_raise_percentage * float(x)
+    new_comp = raise_amount + float(x)
+    return new_comp
+
+
+def give_employee_bonus(x):
+    total_bonus = 10000
+    total_comp_after_bonus = total_bonus + float(x)
+    return total_comp_after_bonus
+
+
+Chris = Employee(name="Chris", salary=100000, years_experience=1)
+Dan = Employee(name="Daniel", salary=95000, years_experience=3)
+Andre = Employee(name="Andre", salary=85000, years_experience=1)
+David = Employee(name="David", salary=100000, years_experience=10)
+
+employee_list = []
+employee_list.append(Chris)
+employee_list.append(Andre)
+employee_list.append(Dan)
+employee_list.append(David)
+
+payroll = [x.salary for x in employee_list]  # list comprehensions
+
+
+
+def give_employee_raise(x):
+    total_raise_percentage = .10
+    raise_amount = total_raise_percentage * float(x)
+    new_comp = raise_amount + float(x)
+    return new_comp
+
+
+def give_employee_bonus(x):
+    total_bonus = 10000
+    total_comp_after_bonus = total_bonus + float(x)
+    return total_comp_after_bonus
+
+payroll_after_raise = [give_employee_raise(x.salary) for x in employee_list]
+payroll_after_bonus = list(map(give_employee_bonus, payroll_after_raise))
+
+
+employees_below_one_hundred = ['name={} salary = {}'.format(x.name, x.salary) for x in employee_list if
+                               x.salary >= 90000]
+employees_above_one_hundred = ['name={} salary={}'.format(x.name, x.salary) for x in employee_list if
+                               x.salary >= 100000]
+
+
+
+dice = [1,2,3,4,5,6]
+
+iteratordice = ExampleIterator2(dice)
+for x in iteratordice:
+    print(x)
+
+iterator2 = ExampleIterator2(payroll)
+
+for x in payroll:
+    print(x)
+
+print("////////////////////")
+
+for x in iterator2:
+    print(x)
